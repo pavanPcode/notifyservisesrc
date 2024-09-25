@@ -1,0 +1,383 @@
+openapi: 3.0.3
+info:
+  title: Swagger NotifyApis - OpenAPI 3.0
+  description: |-
+    NotifyAPis for Send notification using whatsup and mail and sms
+  version: 1.0.11
+
+servers:
+  - url: https://notifyservisesrc.azurewebsites.net
+tags:
+  - name: whatsup
+    description: sending whatsup messages
+  - name: mails
+    description: send mails with or without attachments and c and bcc
+  - name: sms
+    description: sending sms
+paths:
+  /notify/sendwhatsapp:
+    post:
+      tags:
+        - whatsup
+      summary: sending whatsup messages
+      description: sending whatsup messages to provided mobile number
+      requestBody:
+        description: provide message and mobileNumber and superid
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sendwhatsappJson'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/whatsappSuccessResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/whatsappErrorResponse'
+  /notify/sendotpsms:
+    post:
+      tags:
+        - sms
+      summary: sending sms
+      description: sending sms messages to provided mobile number
+      requestBody:
+        description: provide message and mobileNumber and superid
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sendotpsmsJson'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sendotpsmsSuccessResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sendotpsmsErrorResponse'
+  /notify/sendmail:
+    post:
+      tags:
+        - mails
+      summary: sending mails without attachments
+      description: sending mails without attachments .CC is optinal
+      requestBody:
+        description: CC is optional. All fields except CC are required.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sendEmailJson'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailSuccessResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailErrorResponse'
+  /notify/sendmailattachments:
+    post:
+      tags:
+        - mails
+      summary: Sending mails with or without attachments
+      description: Sending mails with or without attachments. CC and attachments are optional.
+      requestBody:
+        description: CC and attachments are optional. All fields except CC and attachments are required.
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/sendmailattachments'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailSuccessResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailErrorResponse'
+  /notify/sendMailWithBcc:
+    post:
+      tags:
+        - mails
+      summary: Sending mails with Bcc
+      description: Sending mails Bcc and with or without attachments.
+      requestBody:
+        description: Sending mails Bcc and with or without attachments.
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/sendMailWithBcc'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailSuccessResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/emailErrorResponse'
+
+
+
+components:
+  schemas:
+    sendwhatsappJson:
+      required:
+        - superid
+        - tomobile
+        - message
+      type: object
+      properties:
+        superid:
+          type: integer
+          format: int64
+          example: 10001
+        message:
+          type: string
+          example: test
+        tomobile:
+          type: integer
+          format: int64
+          example: 9959463811
+      xml:
+        name: sendwhatsappJson
+    whatsappSuccessResponse:
+      type: object
+      properties:
+        ResultData:
+          type: array
+          items: { }
+        message:
+          type: object
+          properties:
+            errormsg:
+              type: string
+              example: 1 saved successfully
+            msgcost:
+              type: integer
+              example: 1
+            msgcount:
+              type: integer
+              example: 1
+            requestid:
+              type: string
+              example: 669603ac523d124652706c8c
+            status:
+              type: string
+              example: success
+            statuscode:
+              type: integer
+              example: 200
+        status:
+          type: boolean
+          example: true
+    whatsappErrorResponse:
+      type: object
+      properties:
+        ResultData:
+          type: array
+          items: { }
+        message:
+          type: object
+          properties:
+            errormsg:
+              type: string
+              example: No valid Mobile Found
+            msgcost:
+              type: integer
+              example: null
+            msgcount:
+              type: integer
+              example: null
+            requestid:
+              type: string
+              example: null
+            status:
+              type: string
+              example: ERROR
+            statuscode:
+              type: integer
+              example: 400
+        status:
+          type: boolean
+          example: false
+    sendotpsmsJson:
+      required:
+        - superid
+        - tomobile
+        - message
+      type: object
+      properties:
+        superid:
+          type: integer
+          format: int64
+          example: 50018
+        tomobile:
+          type: integer
+          format: int64
+          example: 9959463811
+        sendername:
+          type: string
+          example: "parent"
+        otp:
+          type: integer
+          format: int64
+          example: 5745
+        fromorg:
+          type: string
+          example: "birla"
+      xml:
+        name: sendotpsmsJson
+    sendotpsmsSuccessResponse:
+      type: object
+      properties:
+        ResultData:
+          type: string
+          example: "{\"campid\":\"16ab1269faef7dd3bfe6\"}"
+        message:
+          type: string
+          example: "otp succ"
+        status:
+          type: boolean
+          example: true
+    sendotpsmsErrorResponse:
+      type: object
+      properties:
+        ResultData:
+          type: string
+          example: "{'Error':'Missing Mobile number'}"
+        message:
+          type: string
+          example: "otp succ"
+        status:
+          type: boolean
+          example: false
+    sendEmailJson:
+      required:
+        - superid
+        - toaddr
+        - message
+        - subject
+        - cc
+      type: object
+      properties:
+        superid:
+          type: integer
+          format: int64
+          example: 20019
+        toaddr:
+          type: string
+          example: pavan@perennialcode.in
+        message:
+          type: string
+          example: test tamplate
+        subject:
+          type: string
+          example: test mail working or not
+        cc:
+          type: string
+          example: chaitanya@perennialcode.in,chaitanya26121997@gmail.com
+      xml:
+        name: sendEmailJson
+    emailSuccessResponse:
+        type: object
+        properties:
+          message:
+            type: string
+            example: send_email succ
+          status:
+            type: boolean
+            example: true
+    emailErrorResponse:
+        type: object
+        properties:
+          message:
+            type: string
+            example: error message
+          status:
+            type: boolean
+            example: false
+    sendmailattachments:
+      type: object
+      required:
+        - superid
+        - toaddr
+        - message
+        - subject
+      properties:
+        superid:
+          type: integer
+          format: int64
+          example: 20019
+        toaddr:
+          type: string
+          example: pavan@perennialcode.in
+        message:
+          type: string
+          example: testing swagger
+        subject:
+          type: string
+          example: attachments 1234
+        cc:
+          type: string
+          example: chaitanya@perennialcode.in
+        attachments:
+          type: string
+          format: binary
+      xml:
+        name: sendmailattachments
+    sendMailWithBcc:
+      type: object
+      required:
+        - superid
+        - bcc
+        - message
+        - subject
+      properties:
+        superid:
+          type: integer
+          format: int64
+          example: 20019
+        bcc:
+          type: string
+          example: pavan@perennialcode.in,chaitanya@perennialcode.in
+        message:
+          type: string
+          example: testing swagger
+        subject:
+          type: string
+          example: attachments 1234
+        attachments:
+          type: string
+          format: binary
+      xml:
+        name: sendmailattachments
