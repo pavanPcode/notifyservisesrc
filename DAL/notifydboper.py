@@ -38,9 +38,10 @@ def updatequeueresponse(tablids,fromdb):
         qry = updatemailqueue.format(updtIds)
         runqry = sqlhelper(fromdb)
         rows = runqry.update(qry)
-        return 'Updated Successfully'    
+        #return 'Updated Successfully'
+        return {'status': True, 'message': 'Updated Successfully', "ResultData": []}
     except Exception as e:
-        return str(e)
+        return {'status': False, 'message': str(e), "ResultData": []}
 
 def getwhatsappaccount(superid,fromdb):
     try:

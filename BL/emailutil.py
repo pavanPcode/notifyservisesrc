@@ -42,21 +42,22 @@ class EmailUtil:
 
 
     def sendbulkemail(self,sendmailcnt):
-        
-        rows = getemailqueue(sendmailcnt,'pcdbconn')
-        
-        if len(rows) == 0:
-            return []
-        EmailQueueTblIds = []
-        for eachmail in rows:
-            emlMdl = EmailUtil.prepareemailacctobj(eachmail)
-            emlMdl.subject = eachmail['Subject']
-            emlMdl.tomail = eachmail['ToAddress']
-            emlMdl.message = eachmail['Message']
-            retobj = send_email(emlMdl)
-            EmailQueueTblIds.append(eachmail['Id'])
-        updatequeueresponse(EmailQueueTblIds,'pcdbconn')    
-            
+        try:
+            rows = getemailqueue(sendmailcnt,'pcdbconn')
+            if len(rows) == 0:
+                return {'status': False, 'message': 'Check mail credentials or no records found'}
+            EmailQueueTblIds = []
+            for eachmail in rows:
+                emlMdl = EmailUtil.prepareemailacctobj(eachmail)
+                emlMdl.subject = eachmail['Subject']
+                emlMdl.tomail = eachmail['ToAddress']
+                emlMdl.message = eachmail['Message']
+                retobj = send_email(emlMdl)
+                EmailQueueTblIds.append(eachmail['Id'])
+            updatequeueresponse(EmailQueueTblIds,'pcdbconn')
+            return {'status': True, 'message': 'Updated Successfully',"ResultData":EmailQueueTblIds}
+        except Exception as e:
+            return {'status': False, 'message': f'sendbulkmail error : {str(e)}'}
     
     def queuemails(self,requestdata):
         superid = requestdata['superid'] 

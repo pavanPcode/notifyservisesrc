@@ -112,12 +112,11 @@ def sendbulkmail():
         noofrecords = request.args.get('reccnt')
         emlUtil = emailutil.EmailUtil()
         rows = emlUtil.sendbulkemail(noofrecords)
-        if len(rows) == 0:
-            return jsonify(status='No Records')
-        return jsonify(status='success')
+        return jsonify(rows)
     except Exception as e:
-        return jsonify(status='failed')
-    
+        return {'status': False, 'message': f'sendbulkmail error : {str(e)}'}
+
+
 @notifyservice.route('/sendwhatsapp', methods=['POST'])
 def senddirectwhatsapp():
     if request.method == 'POST':

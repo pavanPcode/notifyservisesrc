@@ -94,10 +94,11 @@ class sqlhelper():
         columns = [column[0] for column in cursor.description]
         # Fetch all rows
         rows = cursor.fetchall()
+        print(rows)
         if rows:
-            if len(rows) == 1:
-                row_dict = dict(zip(columns, rows[0]))
-            elif len(rows) > 1:
+            # if len(rows) == 1:
+            #     row_dict = dict(zip(columns, rows[0]))
+            if len(rows) > 1 or  len(rows) == 1:
                 row_dict = [dict(zip(columns, row)) for row in rows]
             else:
                 row_dict = []
