@@ -124,7 +124,7 @@ def senddirectwhatsapp():
         emlUtil = emailutil.EmailUtil()
         rows = emlUtil.sendwhatsapp(inputdata)
 
-        ####writing healthcheck
+        ###writing healthcheck
         try:
             write_log(inputdata, rows, 'sendwhatsapp', 4)
         except Exception as e:
