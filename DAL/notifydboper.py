@@ -22,8 +22,7 @@ def getemailqueue(noofrecs,fromdb):
         return rows
     except Exception as e:
         return str(e)
-    
-def writeemailqueue(superid,toaddr,subject,message,fromdb):
+def writeemailqueue(superid,toaddr,message,subject,fromdb):
     try:
         qry = insertmailqueue.format(superid,toaddr,subject,message)
         runqry = sqlhelper(fromdb)
