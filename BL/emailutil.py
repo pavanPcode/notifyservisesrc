@@ -45,7 +45,7 @@ class EmailUtil:
         try:
             rows = getemailqueue(sendmailcnt,'pcdbconn')
             if len(rows) == 0:
-                return {'status': False, 'message': 'Check mail credentials or no records found'}
+                return {'status': False, 'message': ' no records found'}
             EmailQueueTblIds = []
             for eachmail in rows:
                 emlMdl = EmailUtil.prepareemailacctobj(eachmail)
