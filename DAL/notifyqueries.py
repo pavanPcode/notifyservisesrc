@@ -4,7 +4,7 @@ emailaccount = """ Select Host,Port,EnableSSL,FromMail,DisplayName,UserName,Pass
 
 insertmailqueue = """ Insert into dbo.EmailQueue(SuperId,ToAddress,Subject,Message,CreatedOn) values ({0},'{1}','{2}','{3}',GetDate()) """
 
-emailqueue = """ select Top {0} * from dbo.V_MailQueue """
+emailqueue = """ select Top {0} * from dbo.V_MailQueue WHERE createdon >= DATEADD(HOUR, -24, GETDATE());"""
 updatemailqueue = """ Update dbo.EmailQueue set IsProcessed = 1 where Id in ({0})"""
 
 whatsappaccount = """ Select HostUrl,APIKey From Prod.Whatsappconfig Where SuperId = {0} and IsActive = 1"""
