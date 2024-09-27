@@ -17,11 +17,15 @@ def getemailqueue(noofrecs,fromdb):
         qry = emailqueue.format(noofrecs)
         runqry = sqlhelper(fromdb)
         rows = runqry.queryall(qry)
+        # If `rows` is not a list, convert it to a list
+        if not isinstance(rows, list):
+            rows = [rows]
         if len(rows) == 0:
             return []
         return rows
     except Exception as e:
-        return str(e)
+        print(str(e))
+        return []
 def writeemailqueue(superid,toaddr,message,subject,fromdb):
     try:
         qry = insertmailqueue.format(superid,toaddr,subject,message)
