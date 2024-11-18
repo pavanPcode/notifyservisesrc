@@ -32,6 +32,7 @@ def ServiceHealth():
 import notify
 app.register_blueprint(notify.notifyservice)
 
+##
 # from RollCallAPI import myrollcall
 # from RollCallAPI import adminrollcall
 #app.register_blueprint(myrollcall.rcservice)
